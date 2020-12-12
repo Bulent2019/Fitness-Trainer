@@ -20,6 +20,15 @@ function AddCustomer (props) {
     });
 
     const handleClickOpen = () => {
+        setCustomer({
+            firstname: '',
+            lastname: '',
+            streetaddress: '',
+            postcode: '',
+            city: '',
+            email: '',
+            phone: ''
+        })
         setOpen(true);
     }
 

@@ -20,9 +20,6 @@ function Trainingslist  (props) {
     const [trainings, setTrainings] = useState([]);
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState('');
-    
-    const [newD, setNewD] = useState('');
-    const [n, setN] = useState({firstname: '', lastname: ''});
 
     useEffect(() => {
         getTrainings();
@@ -33,14 +30,7 @@ function Trainingslist  (props) {
     const getTrainings = () => {
         fetch('https://customerrest.herokuapp.com/gettrainings')
         .then(response => response.json())
-        .then(data => {
-            setTrainings(data)
-
-            setNewD(moment(data[0].date, 'Do MMMM YYYY h:mm a'))
-            // data.date = newD
-            console.log(moment(data.date).format('Do MMMM YYYY h:mm a'))
-            console.log(n)
-        })
+        .then(data => {setTrainings(data)})
         .catch(err => console.error(err))
     }
 
@@ -51,7 +41,7 @@ function Trainingslist  (props) {
     //         headers: {'Content-type' : 'application/json'},
     //         body: JSON.stringify(newCustomer)
     //     })
-    //     .then(_ => getCustomers())
+    //     .then(_ => getTrainings())
     //     .then(_ => {
     //             setMsg('Customer succesfully added')
     //             setOpen(true)
@@ -60,42 +50,51 @@ function Trainingslist  (props) {
     // }
 
     const deletTrainings = (link) => {
-        // if(window.confirm('You want to DELET the Training?')){
-        //     fetch(link, {
-        //         method: 'DELETE'
-        //     })
-        //     .then(_ => getTrainings())
-        //     .then(_ => {
-        //         setMsg('Training succesfully deleted')
-        //         setOpen(true)
-        //     })
-        //     .catch(err => console.error(err))
-        // }
+        if(window.confirm('You want to DELET the Training?')){
+            fetch('https://customerrest.herokuapp.com/api/customers', {
+                method: 'DELETE'
+            })
+            .then(param => getTrainings())
+            .then(param => {
+                setMsg('Training succesfully deleted')
+                console.log(link)
+                setOpen(true)
+            })
+            .catch(err => console.error(err))
+        }
     }
-
-   
 
     const columns = [
 
-        {headerName: 'Activity',        field: 'activity',             sortable: true, filter: true, floatingFilter: true, resizable: true},
-        {headerName: 'Date',            field:'date',                  valueFormatter:params => (moment(params.value).format('Do MMMM YYYY h:mm a')),          sortable: true, filter: true, floatingFilter: true, resizable: true},       //setValue: ({date}) => {return moment(date, 'Do MMMM YYYY h:mm a')} ,
-        {headerName: 'Duration / min',  field: 'duration',             sortable: true, filter: true, floatingFilter: true, resizable: true},
-        {headerName: 'Customer',     valueGetter: params => (params.data.customer.firstname + " " + params.data.customer.lastname),                sortable: true, filter: true, floatingFilter: true, resizable: true},
+        {   headerName: 'Activity',        field: 'activity',             sortable: true, filter: true, floatingFilter: true, resizable: true   },
+        {
+            headerName: 'Date',            
+            field:'date',                  
+            valueFormatter:params => (moment(params.value).format('Do MMMM YYYY h:mm a')),          
+            sortable: true, 
+            filter: true, 
+            floatingFilter: true, 
+            resizable: true
+        },       //setValue: ({date}) => {return moment(date, 'Do MMMM YYYY h:mm a')} ,
+        {   headerName: 'Duration / min',  field: 'duration',             sortable: true, filter: true, floatingFilter: true, resizable: true   },
+        {
+            headerName: 'Customer',     
+            valueGetter: params => (params.data.customer.firstname + " " + params.data.customer.lastname),                
+            sortable: true, 
+            filter: true, 
+            floatingFilter: true, 
+            resizable: true
+        },
         {
             headerName: '',
             width: 80,            
             resizable: true,
+            field:'data',
             cellRendererFramework: params =>    <IconButton 
                                                     aria-label="delete"
-                                                    onClick={() => deletTrainings(params.id)}>
+                                                    onClick={() => deletTrainings(params.value)}>
                                                     <DeleteIcon fontSize="small" color="secondary"/>
                                                 </IconButton>
-                                                // <Button 
-                                                //     color="secondary" 
-                                                //     size="small" 
-                                                //     onClick={() => deletCustomer(params.data.links[1].href)}>
-                                                //     Delete
-                                                //  </Button>
         }
     ]
 
@@ -118,7 +117,6 @@ function Trainingslist  (props) {
                     rowData={trainings}
                     pagination={true}
                     paginationPageSize={10}
-        
                 >
                 </AgGridReact>
                 <Snackbar

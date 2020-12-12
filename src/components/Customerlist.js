@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AddCustomer from './AddCustomer';
+import EditCustomer from './EditCustomer';
 
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -30,30 +31,42 @@ function Customerlist  () {
         .catch(err => console.error(err))
     }
 
-    // const addCustomer = (newCustomer) => {
-    //     fetch('https://customerrest.herokuapp.com/api/customers', {
-    //         method: 'POST',
-    //         headers: {'Content-type' : 'application/json'},
-    //         body: JSON.stringify(newCustomer)
-    //     })
-    //     .then(_ => getCustomers())
-    //     .then(_ => {
-    //             setMsg('Customer succesfully added')
-    //             setOpen(true)
-    //         })
-    //     .catch(err => console.error(err))
-    // }
+    const addCustomer = (newCustomer) => {
+        // setCustomers(['']);
+        fetch('https://customerrest.herokuapp.com/api/customers', {
+            method: 'POST',
+            headers: {'Content-type' : 'application/json'},
+            body: JSON.stringify(newCustomer)
+        })
+        .then(_ => getCustomers())
+        .then(_ => {
+                setMsg('Customer succesfully added')
+                setOpen(true)
+            })
+        .catch(err => console.error(err))
+    }
+
+    const updateCustomer = (link, customer) => {
+        fetch(link, {
+            method: 'PUT',
+            headers: {
+                'Content-type' : 'application/json'
+            },
+            body: JSON.stringify(customer)
+        })
+        .then(_ => getCustomers())
+        .then(_ => setMsg('Customer edit succesfully'))
+        .catch(err => console.error(err))
+    }
 
     const deletCustomer = (link) => {
-        if(window.confirm('You want to DELET the Customer?')){
+        if(window.confirm('You want to DELETE the Customer?')){
             fetch(link, {
                 method: 'DELETE'
             })
             .then(_ => getCustomers())
-            .then(_ => {
-                setMsg('Customer succesfully deleted')
-                setOpen(true)
-            })
+            .then(_ => setMsg('Customer succesfully deleted'))
+            .then(_ => setOpen(true))
             .catch(err => console.error(err))
         }
     }
@@ -66,6 +79,16 @@ function Customerlist  () {
         {headerName: 'Streetaddress',   field: 'streetaddress', sortable: true, filter: true, floatingFilter: true, resizable: true},
         {headerName: 'Postcode',        field: 'postcode',      sortable: true, filter: true, floatingFilter: true, resizable: true},
         {headerName: 'City',            field: 'city',          sortable: true, filter: true, floatingFilter: true, resizable: true},
+         {
+            headerName: '',
+            width: 80,            
+            field: 'content.links[1]',
+            cellRendererFramework: params =>    <EditCustomer updateCustomer={updateCustomer} params={params}/>
+                                                // <EditIcon 
+                                                //     aria-label="edit"
+                                                //     onClick={() => deletCustomer(params.data.links[1].href)}>
+                                                // </EditIcon>
+        },
         {
             headerName: '',
             width: 80,            
@@ -90,7 +113,7 @@ function Customerlist  () {
 
     return(
         <div>
-            {/* <AddCustomer addCustomer={addCustomer}/> */}
+            <AddCustomer addCustomer={addCustomer}/>
             <div className="ag-theme-material" style={{height: '700px', width: '100%', margin: 'auto'}}>
                 <AgGridReact
                     ref={gridRef}
