@@ -1,20 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import AddCustomer from './AddCustomer';
 
-import { AgGridReact, AgGridColumn } from 'ag-grid-react';
+import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import moment from 'moment';
-import Customerlist from './Customerlist';
-import { getDateMeta, getDayClassNames } from '@fullcalendar/react';
-import { _ } from 'ag-grid-community';
-
 
 function Trainingslist  (props) {
     const [trainings, setTrainings] = useState([]);
@@ -30,34 +24,19 @@ function Trainingslist  (props) {
     const getTrainings = () => {
         fetch('https://customerrest.herokuapp.com/gettrainings')
         .then(response => response.json())
-        .then(data => {setTrainings(data)})
+        .then(data => setTrainings(data))
         .catch(err => console.error(err))
     }
 
-
-    // const addCustomer = (newCustomer) => {
-    //     fetch('https://customerrest.herokuapp.com/api/customers', {
-    //         method: 'POST',
-    //         headers: {'Content-type' : 'application/json'},
-    //         body: JSON.stringify(newCustomer)
-    //     })
-    //     .then(_ => getTrainings())
-    //     .then(_ => {
-    //             setMsg('Customer succesfully added')
-    //             setOpen(true)
-    //         })
-    //     .catch(err => console.error(err))
-    // }
-
     const deletTrainings = (link) => {
+        console.log(link);
         if(window.confirm('You want to DELET the Training?')){
-            fetch('https://customerrest.herokuapp.com/api/customers', {
+            fetch('https://customerrest.herokuapp.com/api/trainings/' + link, {
                 method: 'DELETE'
             })
-            .then(param => getTrainings())
-            .then(param => {
+            .then(_ => getTrainings())
+            .then(_ => {
                 setMsg('Training succesfully deleted')
-                console.log(link)
                 setOpen(true)
             })
             .catch(err => console.error(err))
@@ -66,11 +45,11 @@ function Trainingslist  (props) {
 
     const columns = [
 
-        {   headerName: 'Activity',        field: 'activity',             sortable: true, filter: true, floatingFilter: true, resizable: true   },
+        {   headerName: 'Activity', field: 'activity', sortable: true, filter: true, floatingFilter: true, resizable: true   },
         {
             headerName: 'Date',            
             field:'date',                  
-            valueFormatter:params => (moment(params.value).format('Do MMMM YYYY h:mm a')),          
+            valueFormatter: params => (moment(params.value).format('Do MMMM YYYY h:mm a')),          
             sortable: true, 
             filter: true, 
             floatingFilter: true, 
@@ -89,7 +68,7 @@ function Trainingslist  (props) {
             headerName: '',
             width: 80,            
             resizable: true,
-            field:'data',
+            field:'id',
             cellRendererFramework: params =>    <IconButton 
                                                     aria-label="delete"
                                                     onClick={() => deletTrainings(params.value)}>

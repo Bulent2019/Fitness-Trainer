@@ -2,36 +2,64 @@ import React from "react";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { calendarFormat } from "moment";
 
-function Full_Calendar () {
+function Full_Calendar (props) {
 
-    const trainings = [{title: "Test", date: new Date()}];
+    // const [trainingEvents, setTrainingEvents] = ([]);
 
-    const addCalendar = (trainings) => {
-         fetch('https://customerrest.herokuapp.com/gettrainings',{ 
-            method: 'POST',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify(trainings)
-        })
-        .then(response => response.json())
-        .then(data => {
-            trainings.title = data[0].customer.firstname
-            trainings.data = data[0].date
-        })
-    }
+    // const openCalendar = () => {
+    //     setTrainingEvents({
+    //         title: props.params.data.firstname,
+    //         date: props.params.data.date
+    //     })
+    // }
+
+
+    const trainings = {title: "Test", date: new Date()};
+
+    // const addToCalendar = (newTraining) => {
+    // // setCustomers(['']);
+    // console.log(newTraining)
+    // fetch('https://customerrest.herokuapp.com/api/trainings', {
+    //     method: 'POST',
+    //     headers: {'Content-type' : 'application/json'},
+    //     body: JSON.stringify(newTraining)
+    // })
+    // .then(_ => getCustomers())
+    // .then(_ => {
+    //         setMsg('Customer succesfully added')
+    //         setOpen(true)
+    //     })
+    // .catch(err => console.error(err))
+    // }
+
+
+
+    // const getEvents = () => {
+    //     fetch('https://customerrest.herokuapp.com/api/trainings')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         setTrainingEvents(data.content)
+    //         console.log(data)
+    //         calendarFormat.getEvents(data.content)
+    //     })
+    //     .catch(err => console.error(err))
+    // }
 
     return(
         <div>
             <h1></h1>
             <FullCalendar
                 plugins={[ dayGridPlugin, timeGridPlugin]}
-                events={trainings}
                 headerToolbar={{
                     left: "prev,next, today",
                     center: "title",
                     right: "dayGridMonth, timeGridWeek, timeGridDay"
                 }}
-                editable={true}
+                editable={false}
+                events={trainings}
+                
                 
                 
                 // locale="fin"

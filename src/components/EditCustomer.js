@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 
 import TextField from '@material-ui/core/TextField';
@@ -35,14 +36,11 @@ function EditCustomer(props) {
         setOpen(true);
     };
     
-  
-
     const handleClose = () => {
         setOpen(false);
     };
 
     const handleSave = () => {
-      console.log(props.params);
         props.updateCustomer(props.params.data.links[0].href, customer);
         handleClose();
     }
@@ -53,10 +51,13 @@ function EditCustomer(props) {
 
     return(
         <div>
-          <EditIcon 
-              aria-label="edit"
-              onClick={handleClickOpen}>
-          </EditIcon>
+          <IconButton>
+            <EditIcon 
+                aria-label="edit"
+                fontSize="small"
+                onClick={handleClickOpen}>
+            </EditIcon>
+          </IconButton>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Edit</DialogTitle>
         <DialogContent>
