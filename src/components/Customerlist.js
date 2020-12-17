@@ -15,7 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 function Customerlist  () {
     const [customers, setCustomers] = useState([]);
-    const [training, setTraining] = useState([]);
+    // const [training, setTraining] = useState([]);
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState('');
 
@@ -32,12 +32,12 @@ function Customerlist  () {
         .catch(err => console.error(err))
     }
 
-       const getTraining = () => {
-        fetch('https://customerrest.herokuapp.com/gettrainings')
-        .then(response => response.json())
-        .then(data => setTraining(data))
-        .catch(err => console.error(err))
-    }
+    // const getTraining = () => {
+    //     fetch('https://customerrest.herokuapp.com/gettrainings')
+    //     .then(response => response.json())
+    //     .then(data => setTraining(data))
+    //     .catch(err => console.error(err))
+    // }
 
     const addCustomer = (newCustomer) => {
         // setCustomers(['']);

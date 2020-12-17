@@ -1,71 +1,53 @@
-import React from "react";
+import React, {useState, useEffect, useRef} from "react";
+
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { calendarFormat } from "moment";
+import interactionPlugin from '@fullcalendar/interaction';
+import { ContactsOutlined } from "@material-ui/icons";
 
 function Full_Calendar (props) {
 
-    // const [trainingEvents, setTrainingEvents] = ([]);
+    const [events, setEvents] = useState ([]);
+    const [training, setTraining] = useState({});
 
-    // const openCalendar = () => {
-    //     setTrainingEvents({
-    //         title: props.params.data.firstname,
-    //         date: props.params.data.date
-    //     })
-    // }
+    useEffect(() => {
+        getEvents();
+    }, []);
 
+    const getEvents = () => {
+        fetch('https://customerrest.herokuapp.com/gettrainings')
+        .then(response => response.json())
+        .then(data => {
+            setTraining(data)
+            const all = data.length
 
-    const trainings = {title: "Test", date: new Date()};
+            // for(let i = 0; i < all; i++){
+            //     setTraining({...training,
+            //             date: training[i].date,
+            //             title: training[i].activity + " / " + training[i].customer.firstname + " " + training[i].customer.lastname
+            //       })
+            // }
+        })
+        .catch(err => console.error(err))
+    }
 
-    // const addToCalendar = (newTraining) => {
-    // // setCustomers(['']);
-    // console.log(newTraining)
-    // fetch('https://customerrest.herokuapp.com/api/trainings', {
-    //     method: 'POST',
-    //     headers: {'Content-type' : 'application/json'},
-    //     body: JSON.stringify(newTraining)
-    // })
-    // .then(_ => getCustomers())
-    // .then(_ => {
-    //         setMsg('Customer succesfully added')
-    //         setOpen(true)
-    //     })
-    // .catch(err => console.error(err))
-    // }
-
-
-
-    // const getEvents = () => {
-    //     fetch('https://customerrest.herokuapp.com/api/trainings')
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         setTrainingEvents(data.content)
-    //         console.log(data)
-    //         calendarFormat.getEvents(data.content)
-    //     })
-    //     .catch(err => console.error(err))
-    // }
-
-    return(
+    return (
         <div>
             <h1></h1>
             <FullCalendar
-                plugins={[ dayGridPlugin, timeGridPlugin]}
+                plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
                 headerToolbar={{
                     left: "prev,next, today",
                     center: "title",
-                    right: "dayGridMonth, timeGridWeek, timeGridDay"
+                    right: "dayGridMonth, timeGridWeek, timeGridDay",
                 }}
-                editable={false}
-                events={trainings}
-                
-                
-                
+                editable={true}
+                events={training}
                 // locale="fin"
+                selectable={true}
             />
         </div>
     )
 }
-
 export default Full_Calendar;

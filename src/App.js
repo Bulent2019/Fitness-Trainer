@@ -13,8 +13,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab  from '@material-ui/core/Tab';
 import Toolbar from '@material-ui/core/Toolbar';
-import { responsiveFontSizes } from '@material-ui/core';
-import { LineWeight } from '@material-ui/icons';
 
 function App() {
   const[value, setValue] = React.useState('customer');
@@ -34,9 +32,6 @@ function App() {
             <Tab value ="statistic" label="Statistics"></Tab>
             <div style={{marginLeft:'330px', fontSize:'22px'}}><h1>Fitness Trainer</h1></div>
           </Tabs>
-          {/* <Typography variant="h6">
-            TodoList
-          </Typography> */}
         </Toolbar>
       </AppBar>
       {value === 'customer' && <div><Customers/></div>}
@@ -44,22 +39,6 @@ function App() {
       {value === 'calendar' && <div><Calendar/></div>}
       {value === 'statistic' && <div><Statistics/></div>}
 
-      {/* <Router>
-        <h1>Fitness Trainer</h1>
-        <div>
-          <Link to = "/">Customers</Link>{' '}
-          <Link to = "/trainings">Trainings</Link>{' '}
-          <Link to = "/calender">Calender</Link>{' '}
-          <Link to = "/statistics">Statistics</Link>
-          <Switch>
-            <Route exact path = "/" component = {Customers}></Route>
-            <Route path = "/trainings" component = {Trainings}></Route>
-            <Route path = "/calender" component = {Calender}></Route>
-            <Route path = "/statistics" component = {Statistics}></Route>
-            <Route render = {() => <h1>Page not found!</h1>}></Route>
-          </Switch>
-        </div>
-      </Router> */}
     </div>
   );
 }
